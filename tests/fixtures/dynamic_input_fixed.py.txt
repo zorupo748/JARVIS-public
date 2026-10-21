@@ -1,0 +1,13 @@
+CONFIGURED_IDENTIFIER = "TRACK123"
+
+
+def ejecutar_skill(comando="", estado=None, entradas=None):
+    estado = dict(estado or {})
+    identifier = CONFIGURED_IDENTIFIER
+    result = {
+        "identifier": identifier,
+        "command": comando,
+        "changed": estado.get("previous_identifier") != identifier,
+    }
+    estado["previous_identifier"] = identifier
+    return {"__jarvis_data__": result, "__jarvis_state__": estado}

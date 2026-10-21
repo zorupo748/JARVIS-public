@@ -1,0 +1,44 @@
+import requests
+from datetime import datetime
+
+def ejecutar_skill(comando):
+    if "mira si hay una nueva versión de Ollama" in comando:
+        latest_version = get_latest_ollama_version()
+        if latest_version:
+            print(f"La última versión de Ollama es {latest_version['tag_name']} publicada el {latest_version['published_at']}.")
+            if latest_version['tag_name'] != get_last_checked_version():
+                print("¡Nueva versión disponible!")
+                print("Cambios principales:")
+                for change in latest_version['changes']:
+                    print(f"- {change}")
+                update_last_checked_version(latest_version['tag_name'])
+            else:
+                print("No hay nuevas versiones disponibles.")
+        else:
+            print("No se pudo obtener la información de la versión de Ollama.")
+    else:
+        print("Comando no reconocido.")
+
+def get_latest_ollama_version():
+    url = "https://api.github.com/repos/ollama/ollama/releases/latest"
+    response = requests.get(url)
+    if response.status_code == 200:
+        data = response.json()
+        changes = [item['body'] for item in data['body'].split('\n') if item.strip().startswith('*')]
+        return {
+            "tag_name": data['tag_name'],
+            "published_at": datetime.strptime(data['published_at'], "%Y-%m-%dT%H:%M:%SZ").strftime("%d/%m/%Y"),
+            "changes": changes
+        }
+    return None
+
+def get_last_checked_version():
+    try:
+        with open("last_checked_version.txt", "r") as file:
+            return file.read().strip()
+    except FileNotFoundError:
+        return None
+
+def update_last_checked_version(version):
+    with open("last_checked_version.txt", "w") as file:
+        file.write(version)

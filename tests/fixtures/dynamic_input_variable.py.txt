@@ -1,0 +1,21 @@
+def ejecutar_skill(comando="", estado=None, entradas=None):
+    estado = dict(estado or {})
+    identifier = (entradas or {}).get("tracking_code") or estado.get("tracking_code")
+    if not identifier:
+        return {
+            "__jarvis_data__": None,
+            "__jarvis_state__": estado,
+            "__jarvis_input_request__": {
+                "field": "tracking_code",
+                "prompt": "Necesito el código de seguimiento.",
+                "kind": "text",
+            },
+        }
+    result = {
+        "identifier": identifier,
+        "command": comando,
+        "changed": estado.get("previous_identifier") != identifier,
+    }
+    estado["tracking_code"] = identifier
+    estado["previous_identifier"] = identifier
+    return {"__jarvis_data__": result, "__jarvis_state__": estado}

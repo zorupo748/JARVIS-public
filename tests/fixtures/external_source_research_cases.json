@@ -1,0 +1,38 @@
+{
+  "known_api": {
+    "source": "https://api.example.test/v1/version",
+    "access_method": "HTTP GET, observed in synthetic test fixture",
+    "observed_endpoints": ["https://api.example.test/v1/version"],
+    "response_format": "JSON object with version and release_notes",
+    "required_parameters": [],
+    "notes": ["Synthetic fixture; no request is sent."],
+    "confidence": 0.98
+  },
+  "static_html": {
+    "source": "https://example.test/tracking.html",
+    "access_method": "HTTP GET the user-facing static page, observed in synthetic test fixture",
+    "observed_endpoints": [],
+    "response_format": "HTML containing a static informational table",
+    "required_parameters": [],
+    "notes": ["No query API was observed; no endpoint is inferred."],
+    "confidence": 0.82
+  },
+  "spa_known_endpoint": {
+    "source": "https://tracking.example.test/",
+    "access_method": "HTTP POST to the observed application endpoint",
+    "observed_endpoints": ["https://tracking.example.test/api/track"],
+    "response_format": "JSON tracking object",
+    "required_parameters": ["tracking_code"],
+    "notes": ["Synthetic fixture; endpoint was provided as observed fact."],
+    "confidence": 0.94
+  },
+  "unknown": {
+    "source": "https://unknown.example.test/",
+    "access_method": "",
+    "observed_endpoints": [],
+    "response_format": "",
+    "required_parameters": [],
+    "notes": ["No access method or endpoint was verified."],
+    "confidence": 0.0
+  }
+}

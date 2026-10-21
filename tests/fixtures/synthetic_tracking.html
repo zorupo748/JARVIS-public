@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>Seguimiento ficticio</title></head>
+<body>
+<h1>Fixture sintética: ningún servicio real</h1>
+<form id="tracking-form">
+  <label>Código de prueba <input id="tracking-code" autocomplete="off"></label>
+  <button id="track" type="submit">Consultar fixture</button>
+</form>
+<p id="observed-code"></p><p id="status"></p><p id="network-result"></p>
+<button id="network" type="button">Intento bloqueado de prueba</button>
+<script>
+const records = { 'DEMO-001': 'En tránsito (simulado)', 'DEMO-002': 'Entregado (simulado)' };
+document.querySelector('#tracking-form').addEventListener('submit', event => {
+  event.preventDefault();
+  const code = document.querySelector('#tracking-code').value;
+  document.querySelector('#status').textContent = 'Consultando fixture';
+  setTimeout(() => {
+    document.querySelector('#observed-code').textContent = code;
+    document.querySelector('#status').textContent = Object.hasOwn(records, code)
+      ? records[code] : 'Sin datos en la fixture';
+  }, 30);
+});
+document.querySelector('#network').addEventListener('click', () => {
+  fetch('https://fixture.invalid/blocked').then(() => {
+    document.querySelector('#network-result').textContent = 'unexpected';
+  }).catch(() => { document.querySelector('#network-result').textContent = 'blocked'; });
+});
+</script>
+</body></html>
